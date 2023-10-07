@@ -5,14 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Background
+  - GameOver
+  - Goal
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bucket
   - Water
   - UI
-  - 
+  - Ball
   - 
   - 
   - 
