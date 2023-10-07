@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Background
   layers:
   - Default
   - TransparentFX
@@ -40,4 +41,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2535573067
+    locked: 0
+  - name: Ball
+    uniqueID: 228984017
+    locked: 0
+  - name: BucketTop
+    uniqueID: 251001383
+    locked: 0
+  - name: BucketBody
+    uniqueID: 91781035
+    locked: 0
+  - name: Line
+    uniqueID: 236132601
     locked: 0
