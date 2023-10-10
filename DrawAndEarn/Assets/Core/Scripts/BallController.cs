@@ -15,16 +15,9 @@ public class BallController : MonoBehaviour
 
     bool canContinue;
 
-    private void Update()
+   public void StartGame()
     {
-        Debug.Log("Nothing");
-        if (Input.GetButtonDown("Jumps"))
-        {
-            Debug.Log("Space");
-           
-            Invoke("ActiveBucket", .5f);
-        }
-        
+        StartCoroutine(BallLauncherSystem());
     }
     IEnumerator BallLauncherSystem()
     {
@@ -53,6 +46,7 @@ public class BallController : MonoBehaviour
                 bucket.SetActive(true);
 
                 canContinue = true;
+                Invoke("BallCheck",5f);
             }
             else
             {
@@ -60,8 +54,17 @@ public class BallController : MonoBehaviour
             }
         }
     }
-    private void ActiveBucket()
-    {
 
+   
+    public void Continue()
+    {
+        canContinue = false;
+        bucket.SetActive(false);
+        CancelInvoke();
+    }
+    void BallCheck()
+    {
+        if (canContinue) GetComponent<GameManager>().GameOver();
+        
     }
 }

@@ -1,57 +1,104 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class LineController : MonoBehaviour
 {
-    [SerializeField] private GameObject linePrefab;
-    [SerializeField] private GameObject line;
+    [SerializeField] private GameObject _linePrefab;
+    [SerializeField] private GameObject _line;
 
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private EdgeCollider2D edgeCollider2D;
-    [SerializeField] private List<Vector2> touchPositionList;
+    [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private EdgeCollider2D _edgeCollider2D;
+    [SerializeField] private List<Vector2> _touchPositionList;
 
+    [SerializeField] private List<GameObject> _lines;
+    [SerializeField] private TextMeshProUGUI _lineCountText;
+
+    private int _lineCount;
+    bool canLine;
+
+    private void Start()
+    {
+        canLine = false;
+        _lineCount = 3;
+        _lineCountText.text = _lineCount.ToString();
+    }
     private void Update()
     {
-        
-        if (Input.GetMouseButtonDown(0))
+        if (canLine && _lineCount !=0)
         {
-            CreateLine();
-        }
-        if (Input.GetMouseButton(0))
-        {
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Vector2.Distance(touchPosition, touchPositionList[^1]) >.1f)
+            
+            if (Input.GetMouseButtonDown(0))
             {
-                UpdateLine(touchPosition);
+                CreateLine();
+            }
+            if (Input.GetMouseButton(0))
+            {
+                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (Vector2.Distance(touchPosition, _touchPositionList[^1]) > .1f)
+                {
+                    UpdateLine(touchPosition);
+                }
             }
         }
+        if (_lines.Count!=0 && _lineCount !=0)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                _lineCount--;
+                _lineCountText.text = _lineCount.ToString();
+            }
+        }
+       
     }
     private void CreateLine()
     {
-        line = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-        lineRenderer = line.GetComponent<LineRenderer>();
+        _line = Instantiate(_linePrefab, Vector2.zero, Quaternion.identity);
+        _lines.Add(_line);
+        _lineRenderer = _line.GetComponent<LineRenderer>();
         
-        edgeCollider2D = line.GetComponent<EdgeCollider2D>();
+        _edgeCollider2D = _line.GetComponent<EdgeCollider2D>();
 
-        touchPositionList.Clear();
+        _touchPositionList.Clear();
 
-        touchPositionList.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        touchPositionList.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        _touchPositionList.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        _touchPositionList.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-        lineRenderer.SetPosition(0, touchPositionList[0]);
-        lineRenderer.SetPosition(1, touchPositionList[1]);
+        _lineRenderer.SetPosition(0, _touchPositionList[0]);
+        _lineRenderer.SetPosition(1, _touchPositionList[1]);
 
-        edgeCollider2D.points = touchPositionList.ToArray();
+        _edgeCollider2D.points = _touchPositionList.ToArray();
 
     }
 
     private void UpdateLine(Vector2 getTouchPosition)
     {
-        touchPositionList.Add(getTouchPosition);
-        lineRenderer.positionCount++;
-        lineRenderer.SetPosition(lineRenderer.positionCount-1,getTouchPosition);
-        edgeCollider2D.points = touchPositionList.ToArray();
+        _touchPositionList.Add(getTouchPosition);
+        _lineRenderer.positionCount++;
+        _lineRenderer.SetPosition(_lineRenderer.positionCount-1,getTouchPosition);
+        _edgeCollider2D.points = _touchPositionList.ToArray();
+    }
+    public void StopLine()
+    {
+        canLine = false;
+    }
+    public void StartLine()
+    {
+        canLine = true;
+        _lineCount = 3;
+        _lineCountText.text = _lineCount.ToString();
     }
 
+    public void Continue()
+    {
+        foreach (var line in _lines)
+        {
+            Destroy(line.gameObject);
+
+        }
+        _lines.Clear();
+        _lineCount = 3;
+        _lineCountText.text = _lineCount.ToString();
+    }
 }
