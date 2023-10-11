@@ -76,6 +76,18 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void CarpiIkiSkor()
+    {
+        int carpiiki = _currentScore * 2;
+        _currentScore = carpiiki;
+        _scoreTexts[2].text = _currentScore.ToString();
+        if (_currentScore > PlayerPrefs.GetInt("BestScore"))
+        {
+            PlayerPrefs.SetInt("BestScore", _currentScore);
+            _bestScoreParticle.gameObject.SetActive(true);
+            _bestScoreParticle.Play();
+        }
+    }
     public void StartGame()
     {
         _panels[0].SetActive(false);
