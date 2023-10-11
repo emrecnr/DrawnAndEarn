@@ -22,13 +22,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] _panels;
     [SerializeField] private TextMeshProUGUI[] _scoreTexts;
 
+    public bool isGameOver = false;
+
    private int _currentScore = 0;
     private void Start()
     {
+        isGameOver = false;
         //Time.timeScale = 0f;
         if (PlayerPrefs.HasKey("BestScore"))
         {
-            _scoreTexts[0].text = PlayerPrefs.GetInt("BestScore").ToString();
+            _scoreTexts[0].text = "BestScore\n" +PlayerPrefs.GetInt("BestScore").ToString();
 
         }
         else
@@ -46,21 +49,26 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        _audios[1].Play();
-        _panels[1].SetActive(true);
-        _panels[2].SetActive(false);
-        Debug.Log("GAME OVER !!!");
-
-        _scoreTexts[1].text = PlayerPrefs.GetInt("BestScore").ToString();
-        _scoreTexts[2].text = _currentScore.ToString();
-
-        if (_currentScore > PlayerPrefs.GetInt("BestScore"))
+        if (!isGameOver)
         {
-            PlayerPrefs.SetInt("BestScore", _currentScore);
-            _bestScoreParticle.gameObject.SetActive(true);
-            _bestScoreParticle.Play();
+            isGameOver = true;
+            _audios[1].Play();
+            _panels[1].SetActive(true);
+            _panels[2].SetActive(false);
+            Debug.Log("GAME OVER !!!");
+
+            _scoreTexts[1].text = PlayerPrefs.GetInt("BestScore").ToString();
+            _scoreTexts[2].text = _currentScore.ToString();
+
+            if (_currentScore > PlayerPrefs.GetInt("BestScore"))
+            {
+                PlayerPrefs.SetInt("BestScore", _currentScore);
+                _bestScoreParticle.gameObject.SetActive(true);
+                _bestScoreParticle.Play();
+            }
+            _lineController.StopLine();
         }
-        _lineController.StopLine();
+
     }
 
     public void StartGame()

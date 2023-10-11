@@ -20,6 +20,7 @@ public class CollisionDetect : MonoBehaviour
             Debug.Log("!!! Game Over !!!");
             _gameManager.GameOver();
             gameObject.SetActive(false);
+            
         }
         
     }
