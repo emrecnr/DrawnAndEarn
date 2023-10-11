@@ -1,5 +1,4 @@
 using System.Collections;
-
 using UnityEngine;
 
 
@@ -15,7 +14,15 @@ public class BallController : MonoBehaviour
 
     bool canContinue;
 
-   public void StartGame()
+    public static int ballCount;
+    public static int ballCountNumber;
+
+    private void Start()
+    {
+        ballCountNumber = 0;
+        ballCount = 0;
+    }
+    public void StartGame()
     {
         StartCoroutine(BallLauncherSystem());
     }
@@ -26,18 +33,30 @@ public class BallController : MonoBehaviour
             if (!canContinue)
             {
                 yield return new WaitForSeconds(.5f);
-                balls[activeBallIndex].transform.position = ballLauncherCenter.transform.position;
 
-                balls[activeBallIndex].SetActive(true);
-                float angle = Random.Range(70f, 110f);
-                Vector3 pos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
+                if (ballCountNumber != 0 && ballCountNumber % 5 == 0)
+                {
+                    for (int i = 0; i < 2; i++)
 
-                balls[activeBallIndex].gameObject.GetComponent<Rigidbody2D>().AddForce(pos * 750);
-                if (activeBallIndex != balls.Length - 1) activeBallIndex++;
+                    {
+                        BallLaunchSettings();
+                    }
 
-                else activeBallIndex = 0;
 
-                yield return new WaitForSeconds(.5f);
+                    ballCount = 2;
+                    ballCountNumber++;
+                }
+                else
+                {
+                    BallLaunchSettings();
+
+                    ballCount = 1;
+                    ballCountNumber++;
+                }
+
+
+
+                yield return new WaitForSeconds(.7f);
 
                 randomBucketPointIndex = Random.Range(0, bucketSpawnPos.Length - 1);
 
@@ -46,7 +65,7 @@ public class BallController : MonoBehaviour
                 bucket.SetActive(true);
 
                 canContinue = true;
-                Invoke("BallCheck",5f);
+                Invoke("BallCheck", 5f);
             }
             else
             {
@@ -55,16 +74,44 @@ public class BallController : MonoBehaviour
         }
     }
 
-   
+
     public void Continue()
     {
-        canContinue = false;
-        bucket.SetActive(false);
-        CancelInvoke();
+        if (ballCount == 1)
+        {
+            canContinue = false;
+            bucket.SetActive(false);
+            CancelInvoke();
+            ballCount--;
+        }
+        else
+        {
+            ballCount--;
+        }
+
+    }
+    private Vector3 GetPosition(float getAngle)
+    {
+        return Quaternion.AngleAxis(GetAngle(70f, 110f), Vector3.forward) * Vector3.right;
+    }
+    private float GetAngle(float value1, float value2)
+    {
+        return Random.Range(value1, value2);
     }
     void BallCheck()
     {
         if (canContinue) GetComponent<GameManager>().GameOver();
-        
+
+    }
+    private void BallLaunchSettings()
+    {
+        balls[activeBallIndex].transform.position = ballLauncherCenter.transform.position;
+        balls[activeBallIndex].SetActive(true);
+        balls[activeBallIndex].gameObject.GetComponent<Rigidbody2D>().AddForce(750 * GetPosition(GetAngle(70f, 110f)));
+
+
+        if (activeBallIndex != balls.Length - 1) activeBallIndex++;
+
+        else activeBallIndex = 0;
     }
 }

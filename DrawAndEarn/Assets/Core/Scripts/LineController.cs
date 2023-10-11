@@ -92,13 +92,17 @@ public class LineController : MonoBehaviour
 
     public void Continue()
     {
-        foreach (var line in _lines)
+        if (BallController.ballCount == 0)
         {
-            Destroy(line.gameObject);
+            foreach (var line in _lines)
+            {
+                Destroy(line.gameObject);
 
+            }
+            _lines.Clear();
+            _lineCount = 3;
+            _lineCountText.text = _lineCount.ToString();
         }
-        _lines.Clear();
-        _lineCount = 3;
-        _lineCountText.text = _lineCount.ToString();
+
     }
 }

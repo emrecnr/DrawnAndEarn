@@ -24,9 +24,10 @@ public class GameManager : MonoBehaviour
 
     public bool isGameOver = false;
 
-   private int _currentScore = 0;
+    private int _currentScore = 0;
     private void Start()
     {
+        _currentScore = 0;
         isGameOver = false;
         //Time.timeScale = 0f;
         if (PlayerPrefs.HasKey("BestScore"))
@@ -40,8 +41,12 @@ public class GameManager : MonoBehaviour
             _scoreTexts[0].text = "0";
         }
     }
-    public void Continue()
+    public void Continue(Vector2 Pos)
     {
+        _bucketScore.transform.position = Pos;
+        _bucketScore.gameObject.SetActive(true);
+        _bucketScore.Play();
+
         _currentScore++;
         _audios[0].Play();
         _ballController.Continue();

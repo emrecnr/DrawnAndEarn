@@ -10,7 +10,7 @@ public class CollisionDetect : MonoBehaviour
         if (collision.gameObject.CompareTag("Goal"))
         {
             Debug.Log("GOAL !!!");
-            _gameManager.Continue();
+            _gameManager.Continue(transform.position);
             gameObject.SetActive(false);
         }
 
