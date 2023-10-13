@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject[] _panels;
     [SerializeField] private TextMeshProUGUI[] _scoreTexts;
+
+    [SerializeField] private Button _adButton;
 
     public bool isGameOver = false;
 
@@ -87,6 +90,7 @@ public class GameManager : MonoBehaviour
             _bestScoreParticle.gameObject.SetActive(true);
             _bestScoreParticle.Play();
         }
+        _adButton.gameObject.SetActive(false);
     }
     public void StartGame()
     {
@@ -98,5 +102,10 @@ public class GameManager : MonoBehaviour
     public void TryGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void QuitGame()
+    {
+        Debug.Log("Exit Game");
+        Application.Quit();
     }
 }

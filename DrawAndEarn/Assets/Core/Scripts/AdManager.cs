@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AdManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ string _adUnitID = "unused";
 #endif
 
     [SerializeField] private GameManager _gameManager;
+    
     private RewardedAd _rewardedAd;
     private void Start()
     {
@@ -24,9 +26,14 @@ string _adUnitID = "unused";
         {
 
         });
+
+        StartCoroutine(LoadRewardAd());
+    }
+    IEnumerator  LoadRewardAd()
+    {
+        yield return new WaitForSeconds(3f);
         LoadRewardedAd();
     }
-
     public void LoadRewardedAd()
     {
         // Clean up the old ad before loading a new one.
